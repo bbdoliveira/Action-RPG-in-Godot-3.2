@@ -18,6 +18,14 @@ _global_script_class_icons={
 config/name="Action RPG"
 run/main_scene="res://World.tscn"
 
+[display]
+
+window/size/width=320
+window/size/height=180
+window/size/test_width=1280
+window/size/test_height=720
+window/stretch/mode="2d"
+
 [importer_defaults]
 
 texture={
