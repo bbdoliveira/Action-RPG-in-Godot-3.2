@@ -20,7 +20,7 @@ onready var animationState = animationTree.get("parameters/playback")
 func _ready():
 	animationTree.active = true
 
-func _process(delta):
+func _physics_process(delta):
 	match state:#match é similar ao switch, caso MOVE, vaso ROLL, etc...
 		MOVE:
 			move_state(delta)
