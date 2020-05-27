@@ -1,8 +1,9 @@
 extends KinematicBody2D
 
-const ACCELERATION = 500
-const MAX_SPEED = 80
-const FRICTION = 500
+export var ACCELERATION = 500
+export var MAX_SPEED = 80
+export var ROLL_SPEED = 125
+export var FRICTION = 500
 
 enum { #Enumera essas "variáveis", a partir do 0, 1, 2...
 	MOVE,
@@ -12,20 +13,23 @@ enum { #Enumera essas "variáveis", a partir do 0, 1, 2...
 
 var state = MOVE
 var velocity = Vector2.ZERO
+var roll_vector = Vector2.DOWN
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
+onready var swordHitbox = $HitboxPivot/SwordHitbox
 
 func _ready():
 	animationTree.active = true
+	swordHitbox.knockback_vector = roll_vector
 
 func _physics_process(delta):
 	match state:#match é similar ao switch, caso MOVE, vaso ROLL, etc...
 		MOVE:
 			move_state(delta)
 		ROLL:
-			pass
+			roll_state(delta)
 		ATTACK:
 			attack_state(delta)
 		
@@ -37,23 +41,42 @@ func move_state (delta): #Função de movimentação
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
+		roll_vector = input_vector
+		swordHitbox.knockback_vector = input_vector
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)
 		animationTree.set("parameters/Attack/blend_position", input_vector)
+		animationTree.set("parameters/Roll/blend_position", input_vector)
 		animationState.travel("Run")
 		velocity = velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * delta)
 	else:
 		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
-
-	velocity = move_and_slide(velocity)
+		
+	move()
+	
+	if Input.is_action_just_pressed("roll"):
+		state = ROLL
 	
 	if Input.is_action_just_pressed("attack"):
 		state = ATTACK
+		
+func roll_state(_delta):
+	velocity = roll_vector * ROLL_SPEED
+	animationState.travel("Roll")
+	move()
 
 func attack_state (_delta):
 	velocity = Vector2.ZERO #Volta pra 0 a velocidade na hora do attack
 	animationState.travel("Attack")
+	
+func move():
+	velocity = move_and_slide(velocity)
+	
+func roll_animation_finished():
+	#velocity = Vector2.ZERO
+	velocity = velocity * 0.8
+	state = MOVE
 	
 func attack_animation_finished():#Metodo criado na track de animação.
 	state = MOVE                 #Quando a anição acabar state = MOVE

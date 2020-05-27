@@ -1,13 +1,11 @@
 extends Node2D
 
+const GrassEffect = preload("res://Effects/GrassEffect.tscn")
 
 func create_grass_effect():
-	var GrassEffect = load("res://Effects/GrassEffect.tscn")
 	var grassEffect = GrassEffect.instance()#Instanciando a cena
-	#vai pegar cena principal
-	var world = get_tree().current_scene
 	#Para que eu possa inserir a instancia da cena dentro do mundo
-	world.add_child(grassEffect)#Adiciona o efeito.
+	get_parent().add_child(grassEffect)#Adiciona o efeito.
 	#para colocar o efeito somente onde tem grass façamos isso.
 	grassEffect.global_position = global_position
 	
