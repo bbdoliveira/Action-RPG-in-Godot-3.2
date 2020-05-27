@@ -16,11 +16,11 @@ animations = [ {
 "frames": [ SubResource( 1 ), SubResource( 2 ) ],
 "loop": true,
 "name": "Animated",
-"speed": 10.0
+"speed": 15.0
 } ]
 
 [node name="HitEffect" type="AnimatedSprite"]
 frames = SubResource( 3 )
 animation = "Animated"
-frame = 1
+offset = Vector2( 0, -8 )
 script = ExtResource( 2 )
