@@ -1016,3 +1016,18 @@ position = Vector2( 112, 376 )
 
 [node name="Bat9" parent="YSort" instance=ExtResource( 7 )]
 position = Vector2( 112, 360 )
+
+[node name="HealthUI" type="Control" parent="."]
+margin_right = 96.0
+margin_bottom = 16.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HealthUI"]
+margin_right = 42.0
+margin_bottom = 14.0
+text = "HP = 4"
+__meta__ = {
+"_edit_use_anchors_": false
+}
